@@ -1,6 +1,26 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { addUser } from "./action";
 
 class App extends Component {
+
+	constructor() {
+		super();
+		this.state = {
+			name: "",
+			phone: ""
+		}
+	}
+
+	handleChange(e) {
+		this.setState({
+			[e.target.name]: e.target.value
+		})
+	}
+
+	handleSubmit() {
+		console.log(this.props);
+	}
 	
 	render() {
 		return (
@@ -13,7 +33,7 @@ class App extends Component {
 								Name
 							</th>
 							<td>
-								<input type="text" />
+								<input type="text" value={this.state.name} onChange={(e) => this.handleChange(e)} name="name" />
 							</td>
 						</tr>
 						<tr>
@@ -21,13 +41,13 @@ class App extends Component {
 								Phone
 							</th>
 							<td>
-								<input type="text" />
+								<input type="text" value={this.state.phone} onChange={(e) => this.handleChange(e)} name="phone" />
 							</td>
 						</tr>
 						<tr>
 							<th>&nbsp;</th>
 							<td>
-								<button type="button">Add User</button>
+								<button type="button" onClick={() => this.handleSubmit()}>Add User</button>
 							</td>
 						</tr>
 					</tbody>
@@ -52,4 +72,14 @@ class App extends Component {
 
 }
 
-export default App;
+const mapStateToProps = state => {
+	return { users: state.users };
+};
+
+const mapDispatchToProps = (dispatch) => { 
+	return bindActionCreators({
+		addUser: addUser
+	}, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
